@@ -1,0 +1,23 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "Tic-Tac-Toe Game",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "author": "Mrityuanjaya",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^18.2.77",
+    "parcel": "^2.12.0",
+    "postcss": "^8.4.38",
+    "process": "^0.11.10",
+    "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
