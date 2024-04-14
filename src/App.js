@@ -6,10 +6,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const App = () => {
   return (
-    <>
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    <div className="flex justify-center items-center h-screen">
       <Board />
-    </>
+    </div>
   );
 };
 
