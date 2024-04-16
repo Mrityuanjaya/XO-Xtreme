@@ -1,46 +1,26 @@
 import { useState } from "react";
 import Square from "../Square/Square";
+import { calculateWinner } from "../../utils";
 
-const Board = () => {
+const Board = (props) => {
   const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+ 
   const onSquareClick = (idx) => {
     const updatedSquares = squares.slice();
     if (updatedSquares[idx] === null && !calculateWinner(squares)) {
-      updatedSquares[idx] = xIsNext ? "X" : "O";
-      setXIsNext(!xIsNext);
+      updatedSquares[idx] = props.xIsNext ? "X" : "O";
+      props.onMove();
       setSquares(updatedSquares);
     }
   };
 
-  const calculateWinner = (squares) => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        return squares[a];
-      }
-    }
-    return null;
-  };
-
   const winner = calculateWinner(squares);
+  if(winner) {
+    props.onWin();
+  }
 
   return (
-    <div className="flex flex-wrap w-64 h-64">
+    <div className="flex flex-wrap w-44 h-44">
       {squares.map((ele, idx) => (
         <Square
           key={idx}
