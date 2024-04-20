@@ -1,40 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BigSquare from "../BigSquare/BigSquare";
-import { calculateWinner } from "../../utils";
+import { calculateWinner, getWinningRowCol } from "../../utils/common";
+import { BoardContext } from "../../utils/BoardContext";
 
 const BigBoard = () => {
-  const [BigSquares, setBigSquares] = useState(Array(9).fill(null));
+  const [squares, setSquares] = useState(Array(9).fill(Array(9).fill(null)));
+  const [bigSquares, setBigSquares] = useState(Array(9).fill(null));
+  const [bigSquaresColors, setBigSquaresColors] = useState(Array(9).fill("red"));
   const [xIsNext, setXIsNext] = useState(true);
-  const onMove = () => {
-    setXIsNext(!xIsNext);
-  }
+  const [winner, setWinner] = useState(null);
+  useEffect(() => {
+    if (calculateWinner(bigSquares) !== null) {
+      setWinner(calculateWinner(bigSquares));
+      getWinningRowCol(bigSquares);
+    }
+  }, [bigSquares]);
   const onWin = (idx) => {
-    const updatedBigSquares = BigSquares.slice();
-    if (updatedBigSquares[idx] === null && !calculateWinner(BigSquares)) {
+    if (bigSquares[idx] === null && calculateWinner(bigSquares) === null) {
+      const updatedBigSquares = bigSquares.slice();
       updatedBigSquares[idx] = xIsNext ? "O" : "X";
       setBigSquares(updatedBigSquares);
     }
-  }
-  const winner = calculateWinner(BigSquares);
-  console.log(winner);
+  };
   return (
-    <div className="flex">
+    <BoardContext.Provider
+      value={{
+        squares: squares,
+        setSquares: setSquares,
+        bigSquares: bigSquares,
+        setBigSquares: setBigSquares,
+        xIsNext: xIsNext,
+        setXIsNext: setXIsNext,
+        bigSquaresColors: bigSquaresColors
+      }}
+    >
       <div>
-        <BigSquare value={BigSquares[0]} onMove={() => onMove()} onWin={()=>onWin(0)} xIsNext={xIsNext} />
-        <BigSquare value={BigSquares[1]} onMove={() => onMove()} onWin={()=>onWin(1)} xIsNext={xIsNext}/>
-        <BigSquare value={BigSquares[2]} onMove={() => onMove()} onWin={()=>onWin(2)} xIsNext={xIsNext}/>
+        {winner && <h2 className="text-4xl">{winner}</h2>}
+        <div className="flex">
+          <div>
+            <BigSquare boardIdx={0} onWin={() => onWin(0)} />
+            <BigSquare boardIdx={1} onWin={() => onWin(1)} />
+            <BigSquare boardIdx={2} onWin={() => onWin(2)} />
+          </div>
+          <div>
+            <BigSquare boardIdx={3} onWin={() => onWin(3)} />
+            <BigSquare boardIdx={4} onWin={() => onWin(4)} />
+            <BigSquare boardIdx={5} onWin={() => onWin(5)} />
+          </div>
+          <div>
+            <BigSquare boardIdx={6} onWin={() => onWin(6)} />
+            <BigSquare boardIdx={7} onWin={() => onWin(7)} />
+            <BigSquare boardIdx={8} onWin={() => onWin(8)} />
+          </div>
+        </div>
       </div>
-      <div>
-        <BigSquare value={BigSquares[3]} onMove={() => onMove()} onWin={()=>onWin(3)} xIsNext={xIsNext}/>
-        <BigSquare value={BigSquares[4]} onMove={() => onMove()} onWin={()=>onWin(4)} xIsNext={xIsNext}/>
-        <BigSquare value={BigSquares[5]} onMove={() => onMove()} onWin={()=>onWin(5)} xIsNext={xIsNext}/>
-      </div>
-      <div>
-        <BigSquare value={BigSquares[6]} onMove={() => onMove()} onWin={()=>onWin(6)} xIsNext={xIsNext}/>
-        <BigSquare value={BigSquares[7]} onMove={() => onMove()} onWin={()=>onWin(7)} xIsNext={xIsNext}/>
-        <BigSquare value={BigSquares[8]} onMove={() => onMove()} onWin={()=>onWin(8)} xIsNext={xIsNext}/>
-      </div>
-    </div>
+    </BoardContext.Provider>
   );
 };
 

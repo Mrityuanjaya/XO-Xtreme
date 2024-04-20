@@ -1,30 +1,39 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Square from "../Square/Square";
-import { calculateWinner } from "../../utils";
+import { calculateWinner } from "../../utils/common";
+import { BoardContext } from "../../utils/BoardContext";
 
 const Board = (props) => {
-  const [squares, setSquares] = useState(Array(9).fill(null));
- 
+  const contextObj = useContext(BoardContext);
+  const { boardIdx, onWin } = props;
+  console.log(contextObj);
   const onSquareClick = (idx) => {
-    const updatedSquares = squares.slice();
-    if (updatedSquares[idx] === null && !calculateWinner(squares)) {
-      updatedSquares[idx] = props.xIsNext ? "X" : "O";
-      props.onMove();
-      setSquares(updatedSquares);
+    const updatedBoard = contextObj.squares[boardIdx].slice();
+    if (
+      updatedBoard[idx] === null &&
+      !calculateWinner(updatedBoard) &&
+      !calculateWinner(contextObj.bigSquares)
+    ) {
+      updatedBoard[idx] = contextObj.xIsNext ? "X" : "O";
+      contextObj.setXIsNext(!contextObj.xIsNext);
+      const updatedSquares = contextObj.squares.slice();
+      updatedSquares[boardIdx] = updatedBoard;
+      contextObj.setSquares(updatedSquares);
     }
   };
-
-  const winner = calculateWinner(squares);
-  if(winner) {
-    props.onWin();
-  }
+  useEffect(() => {
+    const winner = calculateWinner(contextObj.squares[boardIdx]);
+    if (winner) {
+      onWin();
+    }
+  }, contextObj.squares[boardIdx]);
 
   return (
     <div className="flex flex-wrap w-44 h-44">
-      {squares.map((ele, idx) => (
+      {contextObj.squares.map((ele, idx) => (
         <Square
           key={idx}
-          value={squares[idx]}
+          value={contextObj.squares[boardIdx][idx]}
           onSquareClick={() => onSquareClick(idx)}
         />
       ))}

@@ -1,12 +1,23 @@
-import React from 'react'
-import Board from '../Board/Board'
+import Board from "../Board/Board";
+import { BoardContext } from "../../utils/BoardContext";
+import { useContext } from "react";
 
 const BigSquare = (props) => {
+  const { boardIdx, onWin } = props;
+  const contextObj = useContext(BoardContext);
   return (
-    <div className='border-4 border-gray-600 p-4'>
-        <Board onMove={props.onMove} onWin={props.onWin} xIsNext={props.xIsNext}/>
+    <div className="border-4 border-gray-600 p-4 w-52 h-52 flex items-center justify-center">
+      {contextObj.bigSquares[boardIdx] ? (
+        <h2
+          className={`text-9xl text-${contextObj.bigSquaresColors[boardIdx]}-400`}
+        >
+          {contextObj.bigSquares[boardIdx]}
+        </h2>
+      ) : (
+        <Board onWin={onWin} boardIdx={boardIdx} />
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default BigSquare
+export default BigSquare;
