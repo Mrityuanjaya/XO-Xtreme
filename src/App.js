@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import BigBoard from "./components/BigBoard/BigBoard";
 import NavBar from "./components/NavBar/NavBar";
+import HomePage from "./pages/HomePage/HomePage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -9,7 +9,7 @@ const App = () => {
   return (
     <div>
       <NavBar/>
-      <BigBoard />
+      <HomePage />
     </div>
   );
 };

@@ -6,19 +6,31 @@ import { BoardContext } from "../../utils/BoardContext";
 const Board = (props) => {
   const contextObj = useContext(BoardContext);
   const { boardIdx, onWin } = props;
-  console.log(contextObj);
   const onSquareClick = (idx) => {
     const updatedBoard = contextObj.squares[boardIdx].slice();
     if (
       updatedBoard[idx] === null &&
       !calculateWinner(updatedBoard) &&
-      !calculateWinner(contextObj.bigSquares)
+      !calculateWinner(contextObj.bigSquares) &&
+      contextObj.activeBoards[boardIdx]
     ) {
       updatedBoard[idx] = contextObj.xIsNext ? "X" : "O";
       contextObj.setXIsNext(!contextObj.xIsNext);
       const updatedSquares = contextObj.squares.slice();
       updatedSquares[boardIdx] = updatedBoard;
       contextObj.setSquares(updatedSquares);
+
+      // Update active boards
+      if (!contextObj.bigSquares[idx] && idx !== boardIdx) {
+        console.log(idx, " clicked!");
+        contextObj.setActiveBoards(
+          contextObj.activeBoards.map((ele, index) => {
+            return index === idx ? true : false;
+          })
+        );
+      } else {
+        contextObj.setActiveBoards(contextObj.activeBoards.map((ele) => true));
+      }
     }
   };
   useEffect(() => {
@@ -29,12 +41,13 @@ const Board = (props) => {
   }, contextObj.squares[boardIdx]);
 
   return (
-    <div className="flex flex-wrap w-44 h-44">
+    <div className="flex hover:scale-105 flex-wrap w-full h-44">
       {contextObj.squares.map((ele, idx) => (
         <Square
           key={idx}
           value={contextObj.squares[boardIdx][idx]}
           onSquareClick={() => onSquareClick(idx)}
+          isActive={contextObj.activeBoards[boardIdx]}
         />
       ))}
     </div>
