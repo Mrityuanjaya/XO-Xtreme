@@ -19,9 +19,11 @@ const Board = (props) => {
       const updatedSquares = contextObj.squares.slice();
       updatedSquares[boardIdx] = updatedBoard;
       contextObj.setSquares(updatedSquares);
-
       // Update active boards
-      if (!contextObj.bigSquares[idx] && idx !== boardIdx) {
+      if (
+        !contextObj.bigSquares[idx] &&
+        !(idx === boardIdx && calculateWinner(updatedSquares[boardIdx]))
+      ) {
         console.log(idx, " clicked!");
         contextObj.setActiveBoards(
           contextObj.activeBoards.map((ele, index) => {
