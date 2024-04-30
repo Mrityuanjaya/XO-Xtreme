@@ -17,7 +17,7 @@ const SideMenu = (props) => {
       <div className="flex">
         <button
           type="button"
-          class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br shadow-lg transition-all duration-200 ease-in-out w-40 h-12 active:translate-y-0.5 font-medium rounded-lg text-xl px-4 py-2 text-center me-2 mb-2"
+          className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br shadow-lg transition-all duration-200 ease-in-out w-40 h-12 active:translate-y-0.5 font-medium rounded-lg text-xl px-4 py-2 text-center me-2 mb-2"
           onClick={resetBigBoard}
         >
           Play Again!

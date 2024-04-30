@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Square from "../Square/Square";
-import { calculateWinner } from "../../utils/common";
+import { calculateWinner, hasEmptySquares } from "../../utils/common";
 import { BoardContext } from "../../utils/BoardContext";
 
 const Board = (props) => {
@@ -20,18 +20,26 @@ const Board = (props) => {
       updatedSquares[boardIdx] = updatedBoard;
       contextObj.setSquares(updatedSquares);
       // Update active boards
+      console.log(updatedSquares);
       if (
         !contextObj.bigSquares[idx] &&
-        !(idx === boardIdx && calculateWinner(updatedSquares[boardIdx]))
+        !(idx === boardIdx && calculateWinner(updatedSquares[boardIdx])) &&
+        hasEmptySquares(updatedSquares[boardIdx])
       ) {
-        console.log(idx, " clicked!");
         contextObj.setActiveBoards(
           contextObj.activeBoards.map((ele, index) => {
             return index === idx ? true : false;
           })
         );
       } else {
-        contextObj.setActiveBoards(contextObj.activeBoards.map((ele) => true));
+        if (!hasEmptySquares(updatedSquares[boardIdx]))
+          contextObj.setActiveBoards(
+            contextObj.activeBoards.map((ele, idx) => idx != boardIdx)
+          );
+        else
+          contextObj.setActiveBoards(
+            contextObj.activeBoards.map((ele) => true)
+          );
       }
     }
   };

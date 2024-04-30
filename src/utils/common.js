@@ -37,3 +37,7 @@ export const getWinningRowCol = (squares) => {
   }
   return null;
 };
+
+export const hasEmptySquares = (board) => {
+  return board.filter((move) => move === null).length !== 0;
+};
