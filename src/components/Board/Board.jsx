@@ -24,7 +24,7 @@ const Board = (props) => {
       if (
         !contextObj.bigSquares[idx] &&
         !(idx === boardIdx && calculateWinner(updatedSquares[boardIdx])) &&
-        hasEmptySquares(updatedSquares[boardIdx])
+        hasEmptySquares(updatedSquares[idx])
       ) {
         contextObj.setActiveBoards(
           contextObj.activeBoards.map((ele, index) => {
@@ -32,14 +32,11 @@ const Board = (props) => {
           })
         );
       } else {
-        if (!hasEmptySquares(updatedSquares[boardIdx]))
-          contextObj.setActiveBoards(
-            contextObj.activeBoards.map((ele, idx) => idx != boardIdx)
-          );
-        else
-          contextObj.setActiveBoards(
-            contextObj.activeBoards.map((ele) => true)
-          );
+        contextObj.setActiveBoards(
+          updatedSquares.map((ele, index) =>
+            hasEmptySquares(updatedSquares[index])
+          )
+        );
       }
     }
   };
