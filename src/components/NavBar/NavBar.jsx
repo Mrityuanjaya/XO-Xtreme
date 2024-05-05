@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 
 const NavBar = () => {
   const location = useLocation();
-  console.log(location);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
