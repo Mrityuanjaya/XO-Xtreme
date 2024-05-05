@@ -9,30 +9,30 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const App = () => {
-  return (
-    <div>
-      <NavBar />
-      <Outlet />
-    </div>
-  );
+    return (
+        <div>
+            <NavBar />
+            <Outlet />
+        </div>
+    );
 };
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
+    {
         path: "/",
-        element: <HomePage />,
-      },
-      {
-        path: "/rules",
-        element: <RulesPage />,
-      },
-    ],
-    errorElement: <ErrorPage />,
-  },
+        element: <App />,
+        children: [
+            {
+                path: "/",
+                element: <HomePage />,
+            },
+            {
+                path: "/rules",
+                element: <RulesPage />,
+            },
+        ],
+        errorElement: <ErrorPage />,
+    },
 ]);
 
 root.render(<RouterProvider router={router} />);
