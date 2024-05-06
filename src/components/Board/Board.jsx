@@ -28,7 +28,7 @@ const Board = (props) => {
             updatedSquares[boardIdx] = updatedBoard;
             contextObj.setSquares(updatedSquares);
 
-            // Update active boards=
+            // Update active boards
             const nextActiveBoards = getNextActiveBoards(
                 contextObj.bigSquares,
                 updatedSquares,

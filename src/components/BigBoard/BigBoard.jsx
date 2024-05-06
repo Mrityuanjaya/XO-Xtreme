@@ -9,17 +9,18 @@ import { BoardContext } from "../../utils/BoardContext.js";
 
 const BigBoard = (props) => {
     const contextObj = useContext(BoardContext);
+    if (!contextObj.xIsNext) {
+        console.log(
+            getCPUMove(
+                JSON.parse(JSON.stringify(contextObj.squares)),
+                contextObj.bigSquares.slice(),
+                contextObj.activeBoards.slice(),
+                3
+            )
+        );
+    }
     useEffect(() => {
-        if (!contextObj.xIsNext) {
-            console.log(
-                getCPUMove(
-                    JSON.parse(JSON.stringify(contextObj.squares)),
-                    contextObj.bigSquares.slice(),
-                    contextObj.activeBoards.slice(),
-                    2
-                )
-            );
-        }
+        
         if (calculateWinner(contextObj.bigSquares) !== null) {
             contextObj.setWinner(calculateWinner(contextObj.bigSquares));
             if (contextObj.xIsNext) {

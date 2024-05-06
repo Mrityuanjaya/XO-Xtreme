@@ -70,7 +70,8 @@ export const getNextActiveBoards = (
         });
     } else {
         nextActiveBoards = updatedSquares.map(
-            (ele, index) => hasEmptySquares(ele) && !bigSquares[index]
+            (ele, index) =>
+                hasEmptySquares(ele) && !calculateWinner(updatedSquares[index])
         );
     }
     return nextActiveBoards;
@@ -79,7 +80,8 @@ export const getNextActiveBoards = (
 // function which returns [bestMoveRow, bestMoveColumn, bestMoveScore]
 const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
     if (depth === 0) return [-1, -1, 0];
-    let bestMove = [-1, -1, 0];
+    let bestMove = [-1, -1, -1000];
+    if (move == -1) bestMove[2] = 1000;
 
     for (let i = 0; i < 9; i++) {
         // Check if we can move in ith board
@@ -91,7 +93,7 @@ const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
                         bestMove[1] = j;
                     }
                     let score = 0;
-                    squares[i][j] = "O";
+                    squares[i][j] = move == 1 ? "O" : "X";
 
                     // If someone wins in ith board
                     const boardWinner = calculateWinner(squares[i]);
@@ -110,15 +112,14 @@ const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
                                 j,
                                 i
                             );
-                            score =
-                                move * 10 +
-                                getCPUMoveUtil(
-                                    squares,
-                                    bigSquares,
-                                    nextActiveBoards,
-                                    move * -1,
-                                    depth - 1
-                                )[2];
+                            const nextScore = getCPUMoveUtil(
+                                squares,
+                                bigSquares,
+                                nextActiveBoards,
+                                move * -1,
+                                depth - 1
+                            );
+                            score = move * 10 + nextScore[2];
                         }
                     } else {
                         const nextActiveBoards = getNextActiveBoards(
@@ -128,15 +129,20 @@ const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
                             j,
                             i
                         );
-                        score = getCPUMoveUtil(
+                        const nextScore = getCPUMoveUtil(
                             squares,
                             bigSquares,
                             nextActiveBoards,
                             move * -1,
                             depth - 1
                         );
+                        score = nextScore[2];
                     }
-                    if (score > bestMove[2]) {
+                    console.log(i, " ", j, " ", move, " ", score);
+                    if (
+                        (score > bestMove[2] && move == 1) ||
+                        (score < bestMove[2] && move == -1)
+                    ) {
                         bestMove[0] = i;
                         bestMove[1] = j;
                         bestMove[2] = score;
@@ -146,7 +152,6 @@ const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
             }
         }
     }
-    console.log("Active boards: ", activeBoards);
     return bestMove;
 };
 
