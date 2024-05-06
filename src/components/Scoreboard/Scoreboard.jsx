@@ -2,7 +2,7 @@ import React from "react";
 
 const Scoreboard = (props) => {
     return (
-        <div className="w-96">
+        <div className="w-72 md:w-96">
             <table className="w-full border border-blue-500">
                 <thead>
                     <tr className="bg-blue-100">

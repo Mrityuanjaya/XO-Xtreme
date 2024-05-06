@@ -51,7 +51,7 @@ const Board = (props) => {
     }, contextObj.squares[boardIdx]);
 
     return (
-        <div className="flex hover:scale-105 flex-wrap w-full h-44">
+        <div className="flex hover:scale-105 flex-wrap w-full md:h-44 h-24">
             {contextObj.squares.map((ele, idx) => (
                 <Square
                     key={idx}

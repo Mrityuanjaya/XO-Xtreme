@@ -6,7 +6,7 @@ const BigSquare = (props) => {
     const { boardIdx, onWin } = props;
     const contextObj = useContext(BoardContext);
     return (
-        <div className="border-4 border-gray-600 p-4 w-52 h-52 flex items-center justify-center">
+        <div className="border-4 border-gray-600 p-2 md:p-4 md:w-52 md:h-52 w-28 h-28 flex items-center justify-center">
             {contextObj.bigSquares[boardIdx] ? (
                 <h2
                     className={`text-9xl ${

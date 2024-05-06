@@ -13,7 +13,7 @@ const SideMenu = (props) => {
         contextObj.setWinner(null);
     };
     return (
-        <div className="border-4 m-10 border-gray-400 rounded-lg p-3">
+        <div className="border-4 my-2 mx-5 md:m-10 border-gray-400 rounded-lg p-3">
             <div className="flex">
                 <button
                     type="button"
