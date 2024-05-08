@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ActiveInactiveBoard from "../../assets/images/ActiveInactiveBoard.svg";
 const AccordionSection = (props) => {
     const { idx, heading, content, cloudinaryUrl } = props;
     const [isVisible, setIsVisible] = useState(false);
@@ -17,12 +16,12 @@ const AccordionSection = (props) => {
                 </span>
                 <span>{isVisible ? "⬆️" : "⬇️"}</span>
             </div>
-            {isVisible && <div className="text-lg p-4">
-                <p>
-                    {content}
-                    </p>
-                    <img className="mx-auto my-2" src={cloudinaryUrl} alt="Active and Inactive Boards"/>
-                </div>}
+            {isVisible && (
+                <div className="text-lg p-4">
+                    <p>{content}</p>
+                    <img className="mx-auto my-2" src={cloudinaryUrl} />
+                </div>
+            )}
         </div>
     );
 };
