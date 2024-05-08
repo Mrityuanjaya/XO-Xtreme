@@ -29,7 +29,7 @@ const NavBar = () => {
                 </Link>
                 <button
                     onClick={toggleMenu}
-                    className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
+                    className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
                     aria-controls="navbar-default"
                     aria-expanded={isMenuOpen ? "true" : "false"}
                 >

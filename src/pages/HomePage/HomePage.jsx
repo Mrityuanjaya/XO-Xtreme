@@ -37,7 +37,7 @@ const HomePage = () => {
                 setWinner: setWinner,
             }}
         >
-            <div className="flex flex-wrap h-[90vh] items-center justify-around">
+            <div className="flex flex-wrap h-[90vh] items-center justify-around bg-gray-50">
                 <BigBoard onXwin={onXwin} onOwin={onOwin} />
                 <SideMenu xWins={xWins} oWins={oWins} />
             </div>
