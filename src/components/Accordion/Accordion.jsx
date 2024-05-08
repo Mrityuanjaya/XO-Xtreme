@@ -11,6 +11,7 @@ const Accordion = (props) => {
                     idx={idx}
                     heading={section.heading}
                     content={section.content}
+                    cloudinaryUrl={section.cloudinaryUrl}
                 />
             ))}
         </div>
