@@ -38,7 +38,7 @@ const BigBoard = (props) => {
                 JSON.parse(JSON.stringify(contextObj.squares)),
                 contextObj.bigSquares.slice(),
                 contextObj.activeBoards.slice(),
-                3
+                4
             );
             const idx = CPUMove[1];
             const boardIdx = CPUMove[0];
