@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import Square from "../Square/Square";
+import { useContext, useEffect } from "react";
+import Square from "../Square/Square.jsx";
 import {
     calculateWinner,
-    getCPUMove,
     getNextActiveBoards,
-    hasEmptySquares,
 } from "../../utils/common";
 import { BoardContext } from "../../utils/BoardContext";
 
@@ -36,7 +34,6 @@ const Board = (props) => {
                 idx,
                 boardIdx
             );
-
             contextObj.setActiveBoards(nextActiveBoards);
         }
     };
