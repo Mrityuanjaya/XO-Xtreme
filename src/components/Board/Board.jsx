@@ -1,11 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import Square from "../Square/Square";
-import { calculateWinner, hasEmptySquares } from "../../utils/common";
+import {
+    calculateWinner,
+    getCPUMove,
+    getNextActiveBoards,
+    hasEmptySquares,
+} from "../../utils/common";
 import { BoardContext } from "../../utils/BoardContext";
 
 const Board = (props) => {
     const contextObj = useContext(BoardContext);
     const { boardIdx, onWin } = props;
+
     const onSquareClick = (idx) => {
         const updatedBoard = contextObj.squares[boardIdx].slice();
         if (
@@ -16,31 +22,22 @@ const Board = (props) => {
         ) {
             updatedBoard[idx] = contextObj.xIsNext ? "X" : "O";
             contextObj.setXIsNext(!contextObj.xIsNext);
-            const updatedSquares = contextObj.squares.slice();
+            const updatedSquares = JSON.parse(
+                JSON.stringify(contextObj.squares)
+            );
             updatedSquares[boardIdx] = updatedBoard;
             contextObj.setSquares(updatedSquares);
+
             // Update active boards
-            console.log(updatedSquares);
-            if (
-                !contextObj.bigSquares[idx] &&
-                !(
-                    idx === boardIdx &&
-                    calculateWinner(updatedSquares[boardIdx])
-                ) &&
-                hasEmptySquares(updatedSquares[idx])
-            ) {
-                contextObj.setActiveBoards(
-                    contextObj.activeBoards.map((ele, index) => {
-                        return index === idx ? true : false;
-                    })
-                );
-            } else {
-                contextObj.setActiveBoards(
-                    updatedSquares.map((ele, index) =>
-                        hasEmptySquares(updatedSquares[index])
-                    )
-                );
-            }
+            const nextActiveBoards = getNextActiveBoards(
+                contextObj.bigSquares,
+                updatedSquares,
+                contextObj.activeBoards,
+                idx,
+                boardIdx
+            );
+
+            contextObj.setActiveBoards(nextActiveBoards);
         }
     };
     useEffect(() => {

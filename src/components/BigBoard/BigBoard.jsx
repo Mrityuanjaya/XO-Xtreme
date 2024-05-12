@@ -1,11 +1,26 @@
 import { useContext, useEffect } from "react";
 import BigSquare from "../BigSquare/BigSquare";
-import { calculateWinner, getWinningRowCol } from "../../utils/common";
+import {
+    calculateWinner,
+    getCPUMove,
+    getWinningRowCol,
+} from "../../utils/common";
 import { BoardContext } from "../../utils/BoardContext.js";
 
 const BigBoard = (props) => {
     const contextObj = useContext(BoardContext);
+    if (!contextObj.xIsNext) {
+        console.log(
+            getCPUMove(
+                JSON.parse(JSON.stringify(contextObj.squares)),
+                contextObj.bigSquares.slice(),
+                contextObj.activeBoards.slice(),
+                3
+            )
+        );
+    }
     useEffect(() => {
+        
         if (calculateWinner(contextObj.bigSquares) !== null) {
             contextObj.setWinner(calculateWinner(contextObj.bigSquares));
             if (contextObj.xIsNext) {

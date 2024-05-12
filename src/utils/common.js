@@ -46,6 +46,115 @@ export const getWinningRowCol = (squares) => {
     return null;
 };
 
+// function to check if the current board contains any empty square
 export const hasEmptySquares = (board) => {
     return board.filter((move) => move === null).length !== 0;
+};
+
+// function to return the list of next Active boards
+export const getNextActiveBoards = (
+    bigSquares,
+    updatedSquares,
+    activeBoards,
+    moveIdx,
+    boardIdx
+) => {
+    let nextActiveBoards = [];
+    if (
+        !bigSquares[moveIdx] &&
+        !(moveIdx === boardIdx && calculateWinner(updatedSquares[boardIdx])) &&
+        hasEmptySquares(updatedSquares[moveIdx])
+    ) {
+        nextActiveBoards = activeBoards.map((ele, index) => {
+            return index === moveIdx ? true : false;
+        });
+    } else {
+        nextActiveBoards = updatedSquares.map(
+            (ele, index) =>
+                hasEmptySquares(ele) && !calculateWinner(updatedSquares[index])
+        );
+    }
+    return nextActiveBoards;
+};
+
+// function which returns [bestMoveRow, bestMoveColumn, bestMoveScore]
+const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
+    if (depth === 0) return [-1, -1, 0];
+    let bestMove = [-1, -1, -1000];
+    if (move == -1) bestMove[2] = 1000;
+
+    for (let i = 0; i < 9; i++) {
+        // Check if we can move in ith board
+        if (activeBoards[i]) {
+            for (let j = 0; j < 9; j++) {
+                if (squares[i][j] === null) {
+                    if (bestMove[0] === -1) {
+                        bestMove[0] = i;
+                        bestMove[1] = j;
+                    }
+                    let score = 0;
+                    squares[i][j] = move == 1 ? "O" : "X";
+
+                    // If someone wins in ith board
+                    const boardWinner = calculateWinner(squares[i]);
+                    if (boardWinner) {
+                        bigSquares[i] = boardWinner;
+                        // If someone wins the whole game
+                        const bigBoardWinner = calculateWinner(bigSquares);
+                        if (bigBoardWinner) {
+                            score = move * 1000;
+                        } else {
+                            // get the next active boards
+                            const nextActiveBoards = getNextActiveBoards(
+                                bigSquares,
+                                squares,
+                                activeBoards,
+                                j,
+                                i
+                            );
+                            const nextScore = getCPUMoveUtil(
+                                squares,
+                                bigSquares,
+                                nextActiveBoards,
+                                move * -1,
+                                depth - 1
+                            );
+                            score = move * 10 + nextScore[2];
+                        }
+                    } else {
+                        const nextActiveBoards = getNextActiveBoards(
+                            bigSquares,
+                            squares,
+                            activeBoards,
+                            j,
+                            i
+                        );
+                        const nextScore = getCPUMoveUtil(
+                            squares,
+                            bigSquares,
+                            nextActiveBoards,
+                            move * -1,
+                            depth - 1
+                        );
+                        score = nextScore[2];
+                    }
+                    console.log(i, " ", j, " ", move, " ", score);
+                    if (
+                        (score > bestMove[2] && move == 1) ||
+                        (score < bestMove[2] && move == -1)
+                    ) {
+                        bestMove[0] = i;
+                        bestMove[1] = j;
+                        bestMove[2] = score;
+                    }
+                    squares[i][j] = null;
+                }
+            }
+        }
+    }
+    return bestMove;
+};
+
+export const getCPUMove = (squares, bigSquares, activeBoards, depth) => {
+    return getCPUMoveUtil(squares, bigSquares, activeBoards, 1, depth);
 };
