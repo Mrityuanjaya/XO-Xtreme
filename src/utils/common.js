@@ -141,7 +141,6 @@ const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
                         );
                         score = nextScore[2];
                     }
-                    console.log(i, " ", j, " ", move, " ", score);
                     if (
                         (score > bestMove[2] && move == 1) ||
                         (score < bestMove[2] && move == -1)
