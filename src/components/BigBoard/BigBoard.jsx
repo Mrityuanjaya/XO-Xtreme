@@ -7,10 +7,12 @@ import {
     getWinningRowCol,
 } from "../../utils/common";
 import { BoardContext } from "../../utils/BoardContext.js";
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 const BigBoard = (props) => {
     const contextObj = useContext(BoardContext);
-    
+    const { width, height } = useWindowSize();
     useEffect(() => {
         if (calculateWinner(contextObj.bigSquares) !== null) {
             contextObj.setWinner(calculateWinner(contextObj.bigSquares));
@@ -54,7 +56,7 @@ const BigBoard = (props) => {
                 );
                 updatedSquares[boardIdx] = updatedBoard;
                 contextObj.setSquares(updatedSquares);
-    
+
                 // Update active boards
                 const nextActiveBoards = getNextActiveBoards(
                     contextObj.bigSquares,
@@ -79,6 +81,9 @@ const BigBoard = (props) => {
     };
     return (
         <div>
+            {calculateWinner(contextObj.bigSquares) && (
+                <Confetti width={width} height={height} recycle={false} numberOfPieces={2000} tweenDuration={8000}/>
+            )}
             <div className="flex">
                 <BigSquare boardIdx={0} onWin={() => onWin(0)} />
                 <BigSquare boardIdx={1} onWin={() => onWin(1)} />
