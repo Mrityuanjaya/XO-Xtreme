@@ -3,24 +3,49 @@ import BigSquare from "../BigSquare/BigSquare";
 import {
     calculateWinner,
     getCPUMove,
+    getNextActiveBoards,
     getWinningRowCol,
 } from "../../utils/common";
 import { BoardContext } from "../../utils/BoardContext.js";
 
 const BigBoard = (props) => {
     const contextObj = useContext(BoardContext);
-    if (!contextObj.xIsNext) {
-        console.log(
-            getCPUMove(
-                JSON.parse(JSON.stringify(contextObj.squares)),
-                contextObj.bigSquares.slice(),
-                contextObj.activeBoards.slice(),
-                3
-            )
+    if (!contextObj.xIsNext && contextObj.mode === 1) {
+        const CPUMove = getCPUMove(
+            JSON.parse(JSON.stringify(contextObj.squares)),
+            contextObj.bigSquares.slice(),
+            contextObj.activeBoards.slice(),
+            3
         );
+        const idx = CPUMove[1];
+        const boardIdx = CPUMove[0];
+        const updatedBoard = contextObj.squares[boardIdx].slice();
+        if (
+            updatedBoard[idx] === null &&
+            !calculateWinner(updatedBoard) &&
+            !calculateWinner(contextObj.bigSquares) &&
+            contextObj.activeBoards[boardIdx]
+        ) {
+            updatedBoard[idx] = contextObj.xIsNext ? "X" : "O";
+            contextObj.setXIsNext(!contextObj.xIsNext);
+            const updatedSquares = JSON.parse(
+                JSON.stringify(contextObj.squares)
+            );
+            updatedSquares[boardIdx] = updatedBoard;
+            contextObj.setSquares(updatedSquares);
+
+            // Update active boards
+            const nextActiveBoards = getNextActiveBoards(
+                contextObj.bigSquares,
+                updatedSquares,
+                contextObj.activeBoards,
+                idx,
+                boardIdx
+            );
+            contextObj.setActiveBoards(nextActiveBoards);
+        }
     }
     useEffect(() => {
-        
         if (calculateWinner(contextObj.bigSquares) !== null) {
             contextObj.setWinner(calculateWinner(contextObj.bigSquares));
             if (contextObj.xIsNext) {

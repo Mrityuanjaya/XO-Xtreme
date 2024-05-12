@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { BoardContext } from "./BoardContext";
+
 export const calculateWinner = (squares) => {
     const lines = [
         [0, 1, 2],
@@ -158,3 +161,32 @@ const getCPUMoveUtil = (squares, bigSquares, activeBoards, move, depth) => {
 export const getCPUMove = (squares, bigSquares, activeBoards, depth) => {
     return getCPUMoveUtil(squares, bigSquares, activeBoards, 1, depth);
 };
+
+export const makeMove = (boardIdx, idx, ) => {
+    const contextObj = useContext(BoardContext);
+    const updatedBoard = contextObj.squares[boardIdx].slice();
+        if (
+            updatedBoard[idx] === null &&
+            !calculateWinner(updatedBoard) &&
+            !calculateWinner(contextObj.bigSquares) &&
+            contextObj.activeBoards[boardIdx]
+        ) {
+            updatedBoard[idx] = contextObj.xIsNext ? "X" : "O";
+            contextObj.setXIsNext(!contextObj.xIsNext);
+            const updatedSquares = JSON.parse(
+                JSON.stringify(contextObj.squares)
+            );
+            updatedSquares[boardIdx] = updatedBoard;
+            contextObj.setSquares(updatedSquares);
+
+            // Update active boards
+            const nextActiveBoards = getNextActiveBoards(
+                contextObj.bigSquares,
+                updatedSquares,
+                contextObj.activeBoards,
+                idx,
+                boardIdx
+            );
+            contextObj.setActiveBoards(nextActiveBoards);
+        }
+}
